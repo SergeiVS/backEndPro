@@ -9,6 +9,8 @@ public interface InMemoryRepository {
 
     Task addTask(Task task);
 
+//    Task add(Task task);
+
     Optional<Task> findById(Integer id);
 
     List<Task> findAll();

@@ -27,6 +27,10 @@ public class Task {
         return taskDescription;
     }
 
+    public void setTaskDescription(String taskDescription) {
+        this.taskDescription = taskDescription;
+    }
+
     @Override
     public String toString() {
         return "Task{" +

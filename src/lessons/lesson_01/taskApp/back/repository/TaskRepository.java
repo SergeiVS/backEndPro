@@ -2,39 +2,69 @@ package lessons.lesson_01.taskApp.back.repository;
 
 import lessons.lesson_01.taskApp.back.entity.Task;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
-public class TaskRepository implements InMemoryRepository{
-    private List<Task> dataBase;
-    private Integer taskIdCounter;
+public class TaskRepository implements InMemoryRepository {
+    private final List<Task> dataBase;
+    private Integer taskIdCounter = 0;
 
-    public TaskRepository(List<Task> dataBase) {
-        this.dataBase = dataBase;
+    public TaskRepository(){
+        this.dataBase = new ArrayList<>();
+    }
+    private Integer generateId() {
+        return ++taskIdCounter;
     }
 
     @Override
     public Task addTask(Task task) {
-        return null;
+
+        var id = generateId();
+        Task taskForSave = new Task(id, task.getTaskName(), task.getTaskDescription());
+        dataBase.add(taskForSave);
+        return taskForSave;
+
     }
 
     @Override
     public Optional<Task> findById(Integer id) {
-        return Optional.empty();
+        return dataBase.stream()
+                .filter(task -> task.getTaskId().equals(id))
+                .findFirst();
     }
 
     @Override
     public List<Task> findAll() {
-        return null;
+
+        return dataBase;
     }
 
     @Override
     public List<Task> findByName(String name) {
-        return null;
+
+        return dataBase.stream()
+                .filter(task -> task.getTaskName().equals(name))
+                .toList();
+
     }
+
 
     @Override
     public Optional<Task> updateTask(Integer id, String newDescription) {
-        return Optional.empty();
+        updateTaskDescriptionById(id, newDescription);
+        return dataBase.stream()
+                .filter(task -> task.getTaskId().equals(id))
+                .findFirst();
+    }
+
+    private void updateTaskDescriptionById(Integer id, String newDescription) {
+        for (Task task : dataBase) {
+            if (Objects.equals(task.getTaskId(), id)) {
+                task.setTaskDescription(newDescription);
+            }
+        }
     }
 }
+
