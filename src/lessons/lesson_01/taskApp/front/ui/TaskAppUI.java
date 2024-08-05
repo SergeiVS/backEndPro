@@ -5,6 +5,7 @@ import lessons.lesson_01.taskApp.back.dto.RequestDto;
 import lessons.lesson_01.taskApp.back.entity.Task;
 import lessons.lesson_01.taskApp.back.service.AddTaskService;
 import lessons.lesson_01.taskApp.back.service.FindTaskService;
+import lessons.lesson_01.taskApp.back.service.UpdateDescriptionService;
 
 import java.util.List;
 import java.util.Scanner;
@@ -12,43 +13,50 @@ import java.util.Scanner;
 public class TaskAppUI {
     private final AddTaskService addTaskService;
     private final FindTaskService findTaskService;
+
+    private final UpdateDescriptionService updateDescriptionService;
     private final Scanner scanner;
 
-    public TaskAppUI(AddTaskService addTaskService, FindTaskService findTaskService) {
+    public TaskAppUI(AddTaskService addTaskService, FindTaskService findTaskService, UpdateDescriptionService updateDescriptionService) {
         this.addTaskService = addTaskService;
         this.findTaskService = findTaskService;
+        this.updateDescriptionService = updateDescriptionService;
         this.scanner = new Scanner(System.in);
     }
 
     public void run() {
         while (true) {
             printMenu();
-            int choice = Integer.parseInt(scanner.nextLine());
+            try {
+                int choice = Integer.parseInt(scanner.nextLine());
 
-            switch (choice) {
-                case 1:
-                    addNewTask();
-                    break;
-                case 2:
-                    findAllTasks();
-                    break;
-                case 3:
-                    findTaskById();
-                    break;
-                case 4:
-                    findTaskByName();
-                    break;
-                case 5:
-                    deleteTaskById();
-                    break;
-                case 6:
-                    updateTask();
-                    break;
-                case 7:
-                    System.out.println("Exiting...");
-                    return;
-                default:
-                    System.out.println("Invalid choice. Please try again.");
+                switch (choice) {
+                    case 1:
+                        addNewTask();
+                        break;
+                    case 2:
+                        findAllTasks();
+                        break;
+                    case 3:
+                        findTaskById();
+                        break;
+                    case 4:
+                        findTaskByName();
+                        break;
+                    case 5:
+                        deleteTaskById();
+                        break;
+                    case 6:
+                        updateTask();
+                        break;
+                    case 7:
+                        System.out.println("Exiting...");
+                        return;
+                    default:
+                        System.out.println("Invalid choice. Please try again.");
+                }
+            } catch (NumberFormatException exception) {
+                System.out.println("Invalid menu input");
             }
         }
     }
@@ -122,7 +130,17 @@ public class TaskAppUI {
 
     private void updateTask() {
         System.out.print("Enter task ID to update: ");
+        int id = Integer.parseInt(scanner.nextLine());
 
+        System.out.print("Enter new description for task with " + id + ": ");
+        String newDescription = scanner.nextLine();
+
+        ResponseDto<Task> updatedTask = updateDescriptionService.updateDescriptionService(id, newDescription);
+
+        if (updatedTask.getErrors().isEmpty()) {
+            System.out.println(updatedTask.getResult());
+        } else {
+            updatedTask.getErrors().forEach(System.out::println);
+        }
     }
-
 }

@@ -59,7 +59,7 @@ public class TaskRepository implements InMemoryRepository {
                 .findFirst();
     }
 
-    private void updateTaskDescriptionById(Integer id, String newDescription) {
+   private void updateTaskDescriptionById(Integer id, String newDescription) {
         for (Task task : dataBase) {
             if (Objects.equals(task.getTaskId(), id)) {
                 task.setTaskDescription(newDescription);

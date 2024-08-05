@@ -30,9 +30,11 @@ public class FindTaskService {
     }
 
     public ResponseDto<Task> findById(Integer id){
-        Optional<Task> foundedTask = repository.findById(id);
+
+
         List<CoreError> errors = new ArrayList<>();
 
+        Optional<Task> foundedTask = repository.findById(id);
         if (foundedTask.isEmpty()){
             errors.add(new CoreError("Task with id = " + id + " not found"));
             return new ResponseDto<>(new Task(),errors);
