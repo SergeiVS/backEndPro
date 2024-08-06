@@ -9,13 +9,14 @@ public interface InMemoryRepository {
 
     Task addTask(Task task);
 
-//    Task add(Task task);
 
     Optional<Task> findById(Integer id);
 
     List<Task> findAll();
 
     List<Task> findByName(String name);
+
+    Boolean deleteTaskById(Integer id);
 
     Optional<Task> updateTask(Integer id, String newDescription);
 }

@@ -23,10 +23,12 @@ public class UpdateDescriptionService {
 
     public ResponseDto<Task> updateDescriptionService(Integer id, String newDescription) {
         List<CoreError> errors = validationService.validation(new RequestDto("task for validate", newDescription));
-        Optional<Task> updatedTask = Optional.empty();
+        Optional<Task> updatedTask;
 
         if (errors.isEmpty()) {
             updatedTask = repository.updateTask(id, newDescription);
+        } else {
+            return new ResponseDto<>(new Task(), errors);
         }
 
         if (updatedTask.isEmpty()) {

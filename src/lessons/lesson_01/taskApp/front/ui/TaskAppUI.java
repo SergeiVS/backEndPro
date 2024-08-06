@@ -4,6 +4,7 @@ import lessons.lesson_01.taskApp.back.dto.ResponseDto;
 import lessons.lesson_01.taskApp.back.dto.RequestDto;
 import lessons.lesson_01.taskApp.back.entity.Task;
 import lessons.lesson_01.taskApp.back.service.AddTaskService;
+import lessons.lesson_01.taskApp.back.service.DeleteTaskService;
 import lessons.lesson_01.taskApp.back.service.FindTaskService;
 import lessons.lesson_01.taskApp.back.service.UpdateDescriptionService;
 
@@ -15,12 +16,15 @@ public class TaskAppUI {
     private final FindTaskService findTaskService;
 
     private final UpdateDescriptionService updateDescriptionService;
+
+    private final DeleteTaskService deleteTaskService;
     private final Scanner scanner;
 
-    public TaskAppUI(AddTaskService addTaskService, FindTaskService findTaskService, UpdateDescriptionService updateDescriptionService) {
+    public TaskAppUI(AddTaskService addTaskService, FindTaskService findTaskService, UpdateDescriptionService updateDescriptionService, DeleteTaskService deleteTaskService) {
         this.addTaskService = addTaskService;
         this.findTaskService = findTaskService;
         this.updateDescriptionService = updateDescriptionService;
+        this.deleteTaskService = deleteTaskService;
         this.scanner = new Scanner(System.in);
     }
 
@@ -100,14 +104,20 @@ public class TaskAppUI {
 
     private void findTaskById() {
         System.out.print("Enter task ID: ");
-        int id = Integer.parseInt(scanner.nextLine());
+        try {
+            int id = Integer.parseInt(scanner.nextLine());
 
-        ResponseDto<Task> response = findTaskService.findById(id);
 
-        if (response.getErrors().isEmpty()) {
-            System.out.println(response.getResult());
-        } else {
-            response.getErrors().forEach(error -> System.out.println("Error: " + error.getMessage()));
+            ResponseDto<Task> response = findTaskService.findById(id);
+
+
+            if (response.getErrors().isEmpty()) {
+                System.out.println(response.getResult());
+            } else {
+                response.getErrors().forEach(error -> System.out.println("Error: " + error.getMessage()));
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Error: inserted ID is not a number.");
         }
     }
 
@@ -125,6 +135,20 @@ public class TaskAppUI {
 
     private void deleteTaskById() {
         System.out.print("Enter task ID to delete: ");
+        try {
+            int id = Integer.parseInt(scanner.nextLine());
+
+
+            ResponseDto<Boolean> response = deleteTaskService.deleteTaskService(id);
+
+            if (response.getErrors().isEmpty() && response.getResult()) {
+                System.out.println("Task was deleted");
+            } else {
+                response.getErrors().forEach(error -> System.out.println("Error: " + error.getMessage()));
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Error: inserted ID is not a number.");
+        }
 
     }
 

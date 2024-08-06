@@ -3,6 +3,7 @@ package lessons.lesson_01.taskApp;
 import lessons.lesson_01.taskApp.back.repository.InMemoryRepository;
 import lessons.lesson_01.taskApp.back.repository.TaskRepository;
 import lessons.lesson_01.taskApp.back.service.AddTaskService;
+import lessons.lesson_01.taskApp.back.service.DeleteTaskService;
 import lessons.lesson_01.taskApp.back.service.FindTaskService;
 import lessons.lesson_01.taskApp.back.service.UpdateDescriptionService;
 import lessons.lesson_01.taskApp.back.service.validation.ValidationService;
@@ -29,8 +30,8 @@ public class TaskApp {
         AddTaskService addTaskService = new AddTaskService(repository, validationService);
         FindTaskService findTaskService = new FindTaskService(repository);
         UpdateDescriptionService updateDescriptionService = new UpdateDescriptionService(repository, validationService);
-
-        TaskAppUI taskAppUI = new TaskAppUI(addTaskService, findTaskService, updateDescriptionService);
+        DeleteTaskService deleteTaskService = new DeleteTaskService(repository);
+        TaskAppUI taskAppUI = new TaskAppUI(addTaskService, findTaskService, updateDescriptionService, deleteTaskService);
         taskAppUI.run();
 
     }

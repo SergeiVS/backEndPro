@@ -11,9 +11,10 @@ public class TaskRepository implements InMemoryRepository {
     private final List<Task> dataBase;
     private Integer taskIdCounter = 0;
 
-    public TaskRepository(){
+    public TaskRepository() {
         this.dataBase = new ArrayList<>();
     }
+
     private Integer generateId() {
         return ++taskIdCounter;
     }
@@ -50,6 +51,16 @@ public class TaskRepository implements InMemoryRepository {
 
     }
 
+    @Override
+    public Boolean deleteTaskById(Integer id) {
+        boolean isDeleted;
+        Optional<Task> taskForDelete = dataBase.stream()
+                .filter(task -> task.getTaskId().equals(id))
+                .findFirst();
+        isDeleted = taskForDelete.map(dataBase::remove).orElse(false);
+        return isDeleted;
+    }
+
 
     @Override
     public Optional<Task> updateTask(Integer id, String newDescription) {
@@ -59,12 +70,14 @@ public class TaskRepository implements InMemoryRepository {
                 .findFirst();
     }
 
-   private void updateTaskDescriptionById(Integer id, String newDescription) {
+    private void updateTaskDescriptionById(Integer id, String newDescription) {
         for (Task task : dataBase) {
             if (Objects.equals(task.getTaskId(), id)) {
                 task.setTaskDescription(newDescription);
             }
         }
     }
+
+
 }
 
