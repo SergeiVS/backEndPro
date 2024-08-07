@@ -25,12 +25,10 @@ public class DeleteTaskService {
         }
         var result = repository.deleteTaskById(id);
 
-        if (result) {
-            return new ResponseDto<>(result, errors);
-        } else {
+        if (!result) {
             errors.add(new CoreError("Task delete fault, no Task with such ID"));
-            return new ResponseDto<>(result, errors);
         }
+        return new ResponseDto<>(result, errors);
     }
 
 }
